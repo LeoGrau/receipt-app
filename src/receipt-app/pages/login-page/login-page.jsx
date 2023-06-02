@@ -3,7 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 
@@ -16,9 +16,6 @@ import { userService } from "../../services/user.service"
 import "./login-page.css"
 
 
-function signIn(authUser) {
-  return userService.signIn(authUser).then(res => { localStorage.setItem("user", JSON.stringify(res.data)) });
-}
 
 function LoginPage() {
   const title = (
@@ -34,8 +31,16 @@ function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Navigate
+  const navigate = useNavigate();
+
+
 
   // Methods
+  
+  function signIn(authUser) {
+    return userService.signIn(authUser).then(res => { localStorage.setItem("user", JSON.stringify(res.data.resource)); navigate('/');  });
+  }
   const handleSignIn = () => {
     event.preventDefault(); // Prevent form submission and page reload
     const authUser = new AuthUser(username, password);

@@ -1,0 +1,10 @@
+.receipt-page,
+.receipt-page #title,
+.receipt-page #amount,
+.receipt-page #currency,
+.receipt-page #documentType,
+.receipt-page #description,
+.receipt-page #identificationNumber,
+.receipt-page #address {
+  width: 100%;
+}

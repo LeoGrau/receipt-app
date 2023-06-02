@@ -10,6 +10,12 @@ class ReceiptService {
   getReceiptsByUserId(userGuid) {
     return http.get(`${this.path}/user/${userGuid}`);
   }
+  createReceipt(receipt) {
+    return http.post(`${this.path}`, receipt);
+  }
+  updateReceipt(guid,receipt) {
+    return http.put(`${this.path}/${guid}`, receipt);
+  }
 
 }
 

@@ -1,7 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 
+
+
 function Navbar() {
+
+  const navigate = useNavigate();
+  
+  // Methods
+  function signOut() {
+    localStorage.removeItem("user");
+    navigate("/login");
+  }
 
   return (
     <>
@@ -19,7 +29,7 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <i className="bi bi-box-arrow-in-right text-xl"></i>
+            <i onClick={signOut} className="bi bi-box-arrow-in-right text-xl"></i>
           </li>
         </ul>
       </nav>

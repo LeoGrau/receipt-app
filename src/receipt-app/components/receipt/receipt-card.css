@@ -7,3 +7,15 @@
   transition: color 0.2s ease-in-out;
   color: rgb(36, 36, 36);
 }
+
+.receipt-card #id,
+.receipt-card #title,
+.receipt-card #amount,
+.receipt-card #currency,
+.receipt-card #documentType,
+.receipt-card #description,
+.receipt-card #identificationNumber,
+.receipt-card #address {
+  width: 100%;
+}
+
