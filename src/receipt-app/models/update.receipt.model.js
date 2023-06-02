@@ -1,5 +1,5 @@
 class UpdateReceipt {
-  constructor(title, amount, currency, description, identificationNumber, documentType, address) {
+  constructor(title, amount, currency, description, identificationNumber, documentType, address, logoImageUrl) {
     this.title = title;
     this.amount = amount;
     this.currency = currency;
@@ -7,6 +7,7 @@ class UpdateReceipt {
     this.identificationNumber = identificationNumber;
     this.documentType = documentType;
     this.address = address;
+    this.logoImageUrl = logoImageUrl;
   }
 }
 

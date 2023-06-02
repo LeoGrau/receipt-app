@@ -16,6 +16,9 @@ class ReceiptService {
   updateReceipt(guid,receipt) {
     return http.put(`${this.path}/${guid}`, receipt);
   }
+  deleteReceipt(guid) {
+    return http.delete(`${this.path}/${guid}`);
+  }
 
 }
 

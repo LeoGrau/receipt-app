@@ -5,6 +5,7 @@
 .receipt-page #documentType,
 .receipt-page #description,
 .receipt-page #identificationNumber,
-.receipt-page #address {
+.receipt-page #address,
+.receipt-page #logoImageUrl {
   width: 100%;
 }

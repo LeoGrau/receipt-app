@@ -6,11 +6,15 @@ import { Button } from "primereact/button";
 
 import { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./register-page.css";
+import { RegisterUser } from "../../models/register.model";
+import { userService } from "../../services/user.service";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+
   const title = (
     <>
       <div className="mb-3">
@@ -22,7 +26,7 @@ function RegisterPage() {
   const footer = (
     <>
       <div>
-        <Button className="p-button"> Sign Up </Button>
+        <Button className="p-button" onClick={registerUser}> Sign Up </Button>
       </div>
     </>
   );
@@ -33,6 +37,22 @@ function RegisterPage() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [description, setDescription] = useState("");
+
+
+  // Methods
+  function registerUser() {
+    const newUser = new RegisterUser(username, password, firstname, lastname, description);
+    console.log(newUser);
+    userService.signUp(newUser).then(res => { console.log(res) });
+    // Blank spaces 
+    setUsername("");
+    setPassword("")
+    setFirstname("")
+    setLastname("")
+    setDescription("")
+    
+    navigate("/login")
+  }
 
   return (
     <>
@@ -92,7 +112,7 @@ function RegisterPage() {
           <div className="mt-5 text-center">
             <p className="text-xs">
               <span>Do not have an account?</span>{" "}
-              <Link to="/register"> Sign Up </Link>
+              <Link to="/login"> Sign In </Link>
             </p>
           </div>
         </Card>

@@ -31,6 +31,7 @@ function ReceiptCard({ receipt, onEvent }) {
   ];
 
   const [visible, setVisible] = useState(false);
+  const [deleteVisible, setDeleteVisible] = useState(false); 
 
   const [id, setId] = useState("");
   const [amount, setAmount] = useState("");
@@ -38,14 +39,15 @@ function ReceiptCard({ receipt, onEvent }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
-  const [identificationNumber, setIdentificationNumber] = useState();
-  const [documentType, setDocumentType] = useState(); 
+  const [identificationNumber, setIdentificationNumber] = useState("");
+  const [documentType, setDocumentType] = useState("");
+  const [logoImageUrl, setLogoImageUrl] = useState("");
 
-  
   // Cycles
   useEffect(() => {
     receiptService.getReceiptById(receipt.id).then((res) => {
       const receivedReceipts = res.data;
+      console.log(res.data);
       setId(receivedReceipts.id);
       setTitle(receivedReceipts.title);
       setAmount(receivedReceipts.amount);
@@ -54,33 +56,57 @@ function ReceiptCard({ receipt, onEvent }) {
       setAddress(receivedReceipts.address);
       setDocumentType(receivedReceipts.documentType);
       setIdentificationNumber(receivedReceipts.identificationNumber);
+      setLogoImageUrl(receivedReceipts.logoImageUrl);
     });
-    
+
     return () => {};
   }, []);
-
 
   // Methods
 
   function updateReceipt() {
     event.preventDefault();
-    var updatedReceipt = new UpdateReceipt(title, amount, currency.id, description, identificationNumber, documentType.id, address);
+    var updatedReceipt = new UpdateReceipt(
+      title,
+      amount,
+      currency.id,
+      description,
+      identificationNumber,
+      documentType.id,
+      address,
+      logoImageUrl
+    );
     console.log(updatedReceipt);
-    receiptService.updateReceipt(id, updatedReceipt).then(res => { console.log(res); onEvent("timeToUpdate"); },);
+    receiptService.updateReceipt(id, updatedReceipt).then((res) => {
+      console.log(res);
+      onEvent("timeToUpdate");
+    });
   }
+
+  function deleteReceipt() {
+    event.preventDefault();
+    receiptService.deleteReceipt(id).then(res => { console.log(res); onEvent("timeToUpdate")});
+  }
+
+  const handlePrint = () => {
+    const printContent = document.getElementById("print-content");
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = printContent.innerHTML;
+    window.print();
+    document.body.innerHTML = originalContent;
+  };
 
   const footer = (
     <>
       <div className="flex gap-2 justify-content-end">
-        <Button className="p-button-danger">Delete</Button>
+        <Button className="p-button-danger" onClick={() => setDeleteVisible(true)}>Delete</Button>
         <Button className="p-button" onClick={() => setVisible(true)}>
           Edit
         </Button>
       </div>
     </>
   );
-
-  // eslint-disable-next-line no-unused-vars
 
   const titleHtml = (
     <>
@@ -90,6 +116,17 @@ function ReceiptCard({ receipt, onEvent }) {
       </div>
     </>
   );
+  const headerHtml = (
+    <>
+      <div className="flex flex-column gap-4">
+        <h3>{receipt.title}</h3>
+        <div className="flex justify-content-center">
+        <img src={logoImageUrl} style={{width: "80px", height: "80px"}}/>  
+        </div>
+      </div>
+    </>
+  );
+
 
   return (
     <>
@@ -102,13 +139,22 @@ function ReceiptCard({ receipt, onEvent }) {
             <span className="text-gray-500">{receipt.id}</span>
           </p>
         </Card>
+        <Dialog header="Delete" id="delete-dialog" visible={deleteVisible} onHide={() => setDeleteVisible(false)}>
+          <p>Are you sure you want to delete this item?</p>
+          <div className="flex justify-content-end gap-2 mt-3">
+          <Button className="p-button" onClick={deleteReceipt}>Yes</Button>
+          <Button className="p-button-danger" onClick={() => setDeleteVisible(false)}>Cancel</Button>
+          </div>
+        </Dialog>
         <Dialog
           style={{ width: "500px" }}
-          header="Edit Receipt"
+          header={headerHtml}
           visible={visible}
+          id="print-content"
           onHide={() => setVisible(false)}
         >
           <div className="mt-5">
+            <img src="{}" alt="" />
             <form action="">
               <div className="flex-column">
                 <div className="p-float-label mb-5">
@@ -133,9 +179,9 @@ function ReceiptCard({ receipt, onEvent }) {
                     <InputNumber
                       id="ammount"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={(e) => setAmount(e.value)}
                     />
-                    <label htmlFor="ammount">Ammount</label>
+                    <label htmlFor="ammount">Amount</label>
                   </div>
                   <div className="p-float-label mb-5">
                     <Dropdown
@@ -158,7 +204,7 @@ function ReceiptCard({ receipt, onEvent }) {
                   <label htmlFor="username">Description</label>
                 </div>
                 <div className="flex gap-2">
-                  <div style={{width: "100%"}} className="p-float-label mb-5">
+                  <div style={{ width: "100%" }} className="p-float-label mb-5">
                     <InputText
                       id="identificationNumber"
                       value={identificationNumber}
@@ -168,9 +214,9 @@ function ReceiptCard({ receipt, onEvent }) {
                       Identification Number
                     </label>
                   </div>
-                  <div style={{width: "100%"}} className="p-float-label mb-5">
+                  <div style={{ width: "100%" }} className="p-float-label mb-5">
                     <Dropdown
-                      editable 
+                      editable
                       options={documentTypeOptions}
                       id="documentType"
                       value={documentType}
@@ -189,14 +235,14 @@ function ReceiptCard({ receipt, onEvent }) {
                   <label htmlFor="address">Address</label>
                 </div>
               </div>
-              <div className="flex justify-content-end gap-3">
-                <Button className="p-button-danger">Cancel</Button>
-                <Button
-                  className="p-button-success"
-                  onClick={updateReceipt}
-                >
-                  Save
-                </Button>
+              <div className="flex justify-content-between">
+                <i className="bi bi-printer-fill text-2xl" onClick={handlePrint}></i>
+                <div className="flex justify-content-end gap-3">
+                  <Button className="p-button-danger">Cancel</Button>
+                  <Button className="p-button-success" onClick={updateReceipt}>
+                    Save
+                  </Button>
+                </div>
               </div>
             </form>
           </div>
@@ -212,7 +258,7 @@ ReceiptCard.propTypes = {
     title: PropTypes.string.isRequired,
     // Add more prop types for other receipt properties if needed
   }).isRequired,
-  onEvent: PropTypes.func.isRequired
+  onEvent: PropTypes.func.isRequired,
 };
 
 export { ReceiptCard };
