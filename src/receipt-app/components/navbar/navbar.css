@@ -1,5 +1,21 @@
 .navbar {
-  background-color: salmon;
+  background-color: rgb(26, 26, 26);
   height: 70px;
   width: 100%;
+  color: white;
+}
+
+.custom-link span {
+  /* Add your custom styles here */
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+  color: rgb(255, 255, 255, 0.8);;
+  width: 50px;
+  transition: color 0.1s ease-in-out;
+}
+
+.custom-link:hover span {
+  /* Add your custom styles here */
+  color: white;
 }

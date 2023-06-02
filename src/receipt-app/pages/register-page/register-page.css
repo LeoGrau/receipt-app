@@ -1,0 +1,25 @@
+.register-page {
+  background-color: rgb(27, 27, 27);
+}
+
+.register-page .card {
+  width: 80%;
+  max-width: 520px;
+}
+
+.register-page #username,
+.register-page #password,
+.register-page #password input,
+.register-page #firstname,
+.register-page #lastname,
+.register-page #description  {
+  width: 100%;
+  height: 39px;
+}
+
+.register-page #description {
+  max-height: 150px;
+  min-height: 50px;
+  max-width: 100%;
+  min-width: 100%;
+}

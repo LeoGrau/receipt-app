@@ -1,0 +1,9 @@
+.receipt-card {
+  max-width: 400px !important;
+}
+
+.receipt-card .bi.bi-archive-fill:hover {
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  color: rgb(36, 36, 36);
+}

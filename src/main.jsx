@@ -5,13 +5,16 @@ import "./index.css";
 
 import { BrowserRouter } from "react-router-dom";
 
-// Pages
 
+// Bootstrap Icons
+import "bootstrap-icons/font/bootstrap-icons.css";
 
-// Primeflex
-import "primeflex/primeflex.css";
+// React API
+import PrimeReact from 'primereact/api';
+        
 
-// Primereact Components
+PrimeReact.appendTo = "self";
+PrimeReact.ripple = true;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -20,3 +23,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+

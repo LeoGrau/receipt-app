@@ -14,3 +14,17 @@ li {
 a {
   text-decoration: none;
 }
+
+
+.way-big-height {
+  height: 100vh;
+}
+
+/* Grid */
+
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  align-items: center;
+}

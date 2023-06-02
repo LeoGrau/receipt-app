@@ -1,0 +1,19 @@
+.login-page {
+  background-color: rgb(253, 239, 222);
+}
+
+.login-page .card {
+  width: 80%;
+  max-width: 420px;
+}
+
+.login-page #username,
+.login-page #password,
+.login-page #password input {
+  width: 100%;
+  height: 39px;
+}
+
+.login-page .p-card-footer {
+  padding: 0 !important;
+}
