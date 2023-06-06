@@ -17,12 +17,10 @@ import { receiptService } from "../../services/receipt.service";
 import { AddReceipt } from "../../models/add.receipt.model";
 
 function ReceiptPage() {
-  const [receipts, setReceipts] = useState([]);
-
-  const [visible, setVisible] = useState(false);
   
-
-  const [logoImageUrl, setLogoImageUrl] = useState("");
+  
+  const [receipts, setReceipts] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const currencyOptions = [
     { id: 0, name: "Sol" },
@@ -44,9 +42,11 @@ function ReceiptPage() {
   const [address, setAddress] = useState("");
   const [identificationNumber, setIdentificationNumber] = useState();
   const [documentType, setDocumentType] = useState();
+  const [logoImageUrl, setLogoImageUrl] = useState();
 
   function createReceipt() {
     event.preventDefault();
+  
     const userId = JSON.parse(localStorage.getItem("user")).id;
     const newReceipt = new AddReceipt(
       userId,
@@ -56,7 +56,8 @@ function ReceiptPage() {
       description,
       identificationNumber,
       documentType.id,
-      address
+      address,
+      logoImageUrl
     );
     console.log(newReceipt);
     receiptService.createReceipt(newReceipt).then((res) => {
@@ -73,6 +74,7 @@ function ReceiptPage() {
   }
 
   useEffect(() => {
+    localStorage.getItem("printReceipt")? localStorage.removeItem("printReceipt") : null;
     getReceipts();
     return () => {};
   }, []);

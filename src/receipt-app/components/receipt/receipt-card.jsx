@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
@@ -16,8 +16,16 @@ import { receiptService } from "../../services/receipt.service";
 
 // Models
 import { UpdateReceipt } from "../../models/update.receipt.model";
+import { useNavigate } from "react-router-dom";
+// import { Receipt } from "../../models/receipt.model";
+import { PrintContext } from "../../contexts/print-context";
+import { Receipt } from "../../models/receipt.model";
+//import { Receipt } from "../../models/receipt.model";
+// import { useNavigate } from "react-router-dom";
 
 function ReceiptCard({ receipt, onEvent }) {
+  const navigate = useNavigate();
+
   const currencyOptions = [
     { id: 0, currencyName: "Sol" },
     { id: 1, currencyName: "Dollar" },
@@ -31,7 +39,7 @@ function ReceiptCard({ receipt, onEvent }) {
   ];
 
   const [visible, setVisible] = useState(false);
-  const [deleteVisible, setDeleteVisible] = useState(false); 
+  const [deleteVisible, setDeleteVisible] = useState(false);
 
   const [id, setId] = useState("");
   const [amount, setAmount] = useState("");
@@ -43,11 +51,18 @@ function ReceiptCard({ receipt, onEvent }) {
   const [documentType, setDocumentType] = useState("");
   const [logoImageUrl, setLogoImageUrl] = useState("");
 
+  // Contexts
+  const { updatePrintData } = useContext(PrintContext);
+  // function handlePrint() {
+  //   console.log("rest");
+  //   const pdata = new Receipt(id, title, amount, currency, description, identificationNumber, documentType, address, logoImageUrl);
+  //   setPrintData(pdata);
+  // }
+
   // Cycles
   useEffect(() => {
     receiptService.getReceiptById(receipt.id).then((res) => {
       const receivedReceipts = res.data;
-      console.log(res.data);
       setId(receivedReceipts.id);
       setTitle(receivedReceipts.title);
       setAmount(receivedReceipts.amount);
@@ -60,7 +75,7 @@ function ReceiptCard({ receipt, onEvent }) {
     });
 
     return () => {};
-  }, []);
+  }, [receipt.id]);
 
   // Methods
 
@@ -85,22 +100,30 @@ function ReceiptCard({ receipt, onEvent }) {
 
   function deleteReceipt() {
     event.preventDefault();
-    receiptService.deleteReceipt(id).then(res => { console.log(res); onEvent("timeToUpdate")});
+    receiptService.deleteReceipt(id).then((res) => {
+      console.log(res);
+      onEvent("timeToUpdate");
+    });
   }
 
-  const handlePrint = () => {
-    const printContent = document.getElementById("print-content");
-    const originalContent = document.body.innerHTML;
+  // const handlePrint = () => {
+  //   const printContent = document.getElementById("print-content");
+  //   const originalContent = document.body.innerHTML;
 
-    document.body.innerHTML = printContent.innerHTML;
-    window.print();
-    document.body.innerHTML = originalContent;
-  };
+  //   document.body.innerHTML = printContent.innerHTML;
+  //   window.print();
+  //   document.body.innerHTML = originalContent;
+  // };
 
   const footer = (
     <>
       <div className="flex gap-2 justify-content-end">
-        <Button className="p-button-danger" onClick={() => setDeleteVisible(true)}>Delete</Button>
+        <Button
+          className="p-button-danger"
+          onClick={() => setDeleteVisible(true)}
+        >
+          Delete
+        </Button>
         <Button className="p-button" onClick={() => setVisible(true)}>
           Edit
         </Button>
@@ -121,12 +144,14 @@ function ReceiptCard({ receipt, onEvent }) {
       <div className="flex flex-column gap-4">
         <h3>{receipt.title}</h3>
         <div className="flex justify-content-center">
-        <img src={logoImageUrl} style={{width: "80px", height: "80px"}}/>  
+          <img
+            src={logoImageUrl}
+            style={{ width: "50%", objectFit: "contain" }}
+          />
         </div>
       </div>
     </>
   );
-
 
   return (
     <>
@@ -139,11 +164,23 @@ function ReceiptCard({ receipt, onEvent }) {
             <span className="text-gray-500">{receipt.id}</span>
           </p>
         </Card>
-        <Dialog header="Delete" id="delete-dialog" visible={deleteVisible} onHide={() => setDeleteVisible(false)}>
+        <Dialog
+          header="Delete"
+          id="delete-dialog"
+          visible={deleteVisible}
+          onHide={() => setDeleteVisible(false)}
+        >
           <p>Are you sure you want to delete this item?</p>
           <div className="flex justify-content-end gap-2 mt-3">
-          <Button className="p-button" onClick={deleteReceipt}>Yes</Button>
-          <Button className="p-button-danger" onClick={() => setDeleteVisible(false)}>Cancel</Button>
+            <Button className="p-button" onClick={deleteReceipt}>
+              Yes
+            </Button>
+            <Button
+              className="p-button-danger"
+              onClick={() => setDeleteVisible(false)}
+            >
+              Cancel
+            </Button>
           </div>
         </Dialog>
         <Dialog
@@ -154,7 +191,6 @@ function ReceiptCard({ receipt, onEvent }) {
           onHide={() => setVisible(false)}
         >
           <div className="mt-5">
-            <img src="{}" alt="" />
             <form action="">
               <div className="flex-column">
                 <div className="p-float-label mb-5">
@@ -236,7 +272,29 @@ function ReceiptCard({ receipt, onEvent }) {
                 </div>
               </div>
               <div className="flex justify-content-between">
-                <i className="bi bi-printer-fill text-2xl" onClick={handlePrint}></i>
+                <a
+                  target="_blank"
+                  onClick={() => {
+                    updatePrintData(
+                      JSON.stringify(
+                        new Receipt(
+                          id,
+                          title,
+                          amount,
+                          currency,
+                          description,
+                          identificationNumber,
+                          documentType,
+                          address,
+                          logoImageUrl
+                        )
+                      )
+                    );
+                    navigate({ pathname: "/print" });
+                  }}
+                >
+                  <i className="bi bi-printer-fill text-2xl"></i>
+                </a>
                 <div className="flex justify-content-end gap-3">
                   <Button className="p-button-danger">Cancel</Button>
                   <Button className="p-button-success" onClick={updateReceipt}>

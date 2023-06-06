@@ -16,19 +16,20 @@ import "primeflex/primeflex.css";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import PrivateRoute from "./receipt-app/components/private-route/private-route";
+import { PrintPage } from "./receipt-app/pages/print-page/print-page";
+import { PrintProvider } from "./receipt-app/contexts/print-context";
 
 function App() {
   var location = useLocation();
 
   function showNavbar() {
     var pathname = location.pathname.substring(1);
-    console.log(pathname);
-    return pathname != "login" && pathname != "register";
+    return pathname != "login" && pathname != "register" && pathname != "print";
   }
   // element={<LoginPage />}
   return (
-    <>
-      {showNavbar() && <Navbar/> }
+    <PrintProvider>
+      {showNavbar() && <Navbar />}
       <Routes>
         <Route exact path="/" element={<PrivateRoute />}>
           <Route exact path="/" element={<HomePage />} />
@@ -39,11 +40,35 @@ function App() {
         <Route exact path="/receipts" element={<PrivateRoute />}>
           <Route exact path="/receipts" element={<ReceiptPage />} />
         </Route>
-        <Route path="/login" element={localStorage.getItem("user") ? <Navigate to="/" /> : <LoginPage />}></Route>
-        <Route path="/register" element={localStorage.getItem("user") ? <Navigate to="/" /> : <RegisterPage />}></Route>
-        <Route path="*" element={<HomePage />} />
+        <Route path="/print" element={<PrintPage></PrintPage>}></Route>
+        <Route
+          path="/login"
+          element={
+            localStorage.getItem("user") ? <Navigate to="/" /> : <LoginPage />
+          }
+        ></Route>
+        <Route
+          path="/register"
+          element={
+            localStorage.getItem("user") ? (
+              <Navigate to="/" />
+            ) : (
+              <RegisterPage />
+            )
+          }
+        ></Route>
+        <Route
+          path="*"
+          element={
+            localStorage.getItem("user") ? (
+              <Navigate to="/" />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
       </Routes>
-    </>
+    </PrintProvider>
   );
 }
 

@@ -1,0 +1,13 @@
+.receipt-print {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(3, 1fr);
+  background-color: black;
+  width: 80%;
+  padding: 2px;
+}
+
+.receipt-print p {
+  padding: 3px;
+  background-color: rgb(155, 215, 255);
+}

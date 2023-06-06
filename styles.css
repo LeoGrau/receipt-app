@@ -1,0 +1,16 @@
+@media print {
+  th, td, p {
+    border: 1px solid black !important;
+    padding: 10px !important;
+    margin: 0 !important;
+  }
+  
+  table {
+    width: 50% !important;
+  }
+  
+  p {
+    width: 679px !important; 
+    margin: 2px !important;
+  }
+}

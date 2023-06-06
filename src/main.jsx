@@ -5,22 +5,19 @@ import "./index.css";
 
 import { BrowserRouter } from "react-router-dom";
 
-
 // Bootstrap Icons
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 // React API
-import PrimeReact from 'primereact/api';
-        
+import PrimeReact from "primereact/api";
 
 PrimeReact.appendTo = "self";
 PrimeReact.ripple = true;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter basename="/receipt-app">
-      <App />
-    </BrowserRouter>
+      <BrowserRouter basename="">
+        <App />
+      </BrowserRouter>
   </React.StrictMode>
 );
-
