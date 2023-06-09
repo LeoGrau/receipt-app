@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { PrintContext } from "../../contexts/print-context";
-// import { Receipt } from "../../models/receipt.model";
 
 // Styles
 import "./print-page.css";

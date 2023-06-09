@@ -213,6 +213,7 @@ function ReceiptCard({ receipt, onEvent }) {
                   </div>
                   <div className="p-float-label mb-5">
                     <InputNumber
+                      minFractionDigits={2}
                       id="ammount"
                       value={amount}
                       onChange={(e) => setAmount(e.value)}

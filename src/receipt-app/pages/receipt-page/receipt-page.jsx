@@ -35,7 +35,7 @@ function ReceiptPage() {
   ];
 
   // For adding
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState();
   const [currency, setCurrency] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -62,6 +62,8 @@ function ReceiptPage() {
     console.log(newReceipt);
     receiptService.createReceipt(newReceipt).then((res) => {
       console.log(res.data);
+      getReceipts();
+      setVisible(false);
     });
   }
 
@@ -133,6 +135,7 @@ function ReceiptPage() {
                     <InputNumber
                       id="ammount"
                       value={amount}
+                      minFractionDigits={2}
                       onChange={(e) => setAmount(e.value)}
                     />
                     <label htmlFor="ammount">Ammount</label>
