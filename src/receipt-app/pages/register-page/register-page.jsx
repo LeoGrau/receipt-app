@@ -1,20 +1,53 @@
+// React Stuff
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+// Styles
+import "./register-page.css";
+
+// PrimeReact Components
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 
-import { useState } from "react";
-
-import { Link, useNavigate } from "react-router-dom";
-
-import "./register-page.css";
+// Models
 import { RegisterUser } from "../../models/register.model";
+
+// Services
 import { userService } from "../../services/user.service";
 
 function RegisterPage() {
+
+  // Inputs
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [description, setDescription] = useState("");
+
+  // Consts
   const navigate = useNavigate();
 
+  // Methods
+  function registerUser() {
+    const newUser = new RegisterUser(username, password, firstname, lastname, description);
+    console.log(newUser);
+    userService.signUp(newUser).then(res => { console.log(res) });
+
+    // Blank spaces 
+    setUsername("");
+    setPassword("")
+    setFirstname("")
+    setLastname("")
+    setDescription("")
+    
+    navigate("/login")
+  }
+
+  // Template
+  // Part of Dialog
   const title = (
     <>
       <div className="mb-3">
@@ -30,29 +63,6 @@ function RegisterPage() {
       </div>
     </>
   );
-
-  // Inputs
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [description, setDescription] = useState("");
-
-
-  // Methods
-  function registerUser() {
-    const newUser = new RegisterUser(username, password, firstname, lastname, description);
-    console.log(newUser);
-    userService.signUp(newUser).then(res => { console.log(res) });
-    // Blank spaces 
-    setUsername("");
-    setPassword("")
-    setFirstname("")
-    setLastname("")
-    setDescription("")
-    
-    navigate("/login")
-  }
 
   return (
     <>

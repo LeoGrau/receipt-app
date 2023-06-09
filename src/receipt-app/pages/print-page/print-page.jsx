@@ -1,13 +1,20 @@
-import { useContext, useEffect, useState } from "react";
-import { PrintContext } from "../../contexts/print-context";
-
 // Styles
 import "./print-page.css";
+
+// React Stuff
+import { useContext, useEffect, useState } from "react";
+
+// Contexts
+import { PrintContext } from "../../contexts/print-context";
+
+// Primereact Components
 import { Button } from "primereact/button";
 
 function PrintPage() {
+  // Contexts
   const { printData } = useContext(PrintContext);
 
+  // Inputs
   const [id, setId] = useState();
   const [title, setTitle] = useState();
   const [amount, setAmount] = useState();
@@ -18,6 +25,22 @@ function PrintPage() {
   const [address, setAddress] = useState();
   const [logoImageUrl, setLogoImageUrl] = useState();
 
+  
+  // Use Effect
+  useEffect(() => {
+    setReceiptForPrinting();
+    return () => {
+    };
+  }, []);
+  
+  
+  // Methods
+  // Print page
+  function printPage() {
+    window.print();
+  }
+  
+  // Set receipt data for printing
   function setReceiptForPrinting() {
     console.log(localStorage.getItem("printReceipt"));
     if (localStorage.getItem("printReceipt") == null) {
@@ -38,6 +61,7 @@ function PrintPage() {
     setLogoImageUrl(printReceipt.logoImageUrl);
   }
 
+  // Set Currency Abbreviation
   function setCurrencyAbbreviation(currency) {
     switch (currency) {
       case "Sol":
@@ -51,21 +75,8 @@ function PrintPage() {
     }
   }
 
-  // Use Effect Cycle
-  useEffect(() => {
-    setReceiptForPrinting();
-    // window.addEventListener("beforeunload", () => { localStorage.removeItem("printReceipt"); });
-    return () => {
-      //window.removeEventListener("beforeunload", () => { localStorage.removeItem("printReceipt"); })
-    };
-  }, []);
 
-
-  // Methods
-  function printPage() {
-    window.print();
-  }
-
+  // Template
   return (
     <>
       <div className="flex justify-content-center align-items-center" style={{ height: "100vh" }}>

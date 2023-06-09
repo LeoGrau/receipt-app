@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// PrimeReact Components
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
@@ -18,10 +19,24 @@ import { AddReceipt } from "../../models/add.receipt.model";
 
 function ReceiptPage() {
   
-  
+  // Attributes
+  // Inputs
+  const [amount, setAmount] = useState();
+  const [currency, setCurrency] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
+  const [identificationNumber, setIdentificationNumber] = useState();
+  const [documentType, setDocumentType] = useState();
+  const [logoImageUrl, setLogoImageUrl] = useState();
+
+  // To Show Receipts
   const [receipts, setReceipts] = useState([]);
+  
+  // For Dialog Visibility
   const [visible, setVisible] = useState(false);
 
+  // Consts
   const currencyOptions = [
     { id: 0, name: "Sol" },
     { id: 1, name: "Dollar" },
@@ -34,19 +49,10 @@ function ReceiptPage() {
     { id: 2, name: "ImmigrationCard" },
   ];
 
-  // For adding
-  const [amount, setAmount] = useState();
-  const [currency, setCurrency] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [address, setAddress] = useState("");
-  const [identificationNumber, setIdentificationNumber] = useState();
-  const [documentType, setDocumentType] = useState();
-  const [logoImageUrl, setLogoImageUrl] = useState();
-
+  // Methods
+  // Add receipt
   function createReceipt() {
     event.preventDefault();
-  
     const userId = JSON.parse(localStorage.getItem("user")).id;
     const newReceipt = new AddReceipt(
       userId,
@@ -67,6 +73,7 @@ function ReceiptPage() {
     });
   }
 
+  // Get all receipts
   function getReceipts() {
     var user = JSON.parse(localStorage.getItem("user"));
     receiptService.getReceiptsByUserId(user.id).then((res) => {
@@ -75,12 +82,14 @@ function ReceiptPage() {
     });
   }
 
+  // UseEffect
   useEffect(() => {
     localStorage.getItem("printReceipt")? localStorage.removeItem("printReceipt") : null;
     getReceipts();
     return () => {};
   }, []);
 
+  // Template
   return (
     <div className="receipt-page flex justify-content-center ">
       <div>

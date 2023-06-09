@@ -1,5 +1,7 @@
+// React 
 import { useContext, useEffect, useState } from "react";
 
+// Primereact 
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -10,22 +12,23 @@ import { Dropdown } from "primereact/dropdown";
 import PropTypes from "prop-types";
 
 import "./receipt-card.css";
+import { useNavigate } from "react-router-dom";
 
 // Services
 import { receiptService } from "../../services/receipt.service";
 
 // Models
 import { UpdateReceipt } from "../../models/update.receipt.model";
-import { useNavigate } from "react-router-dom";
-// import { Receipt } from "../../models/receipt.model";
-import { PrintContext } from "../../contexts/print-context";
 import { Receipt } from "../../models/receipt.model";
-//import { Receipt } from "../../models/receipt.model";
-// import { useNavigate } from "react-router-dom";
+
+// Context
+import { PrintContext } from "../../contexts/print-context";
+
 
 function ReceiptCard({ receipt, onEvent }) {
+  
+  // Consts
   const navigate = useNavigate();
-
   const currencyOptions = [
     { id: 0, currencyName: "Sol" },
     { id: 1, currencyName: "Dollar" },
@@ -38,9 +41,7 @@ function ReceiptCard({ receipt, onEvent }) {
     { id: 2, currencyName: "ImmigrationCard" },
   ];
 
-  const [visible, setVisible] = useState(false);
-  const [deleteVisible, setDeleteVisible] = useState(false);
-
+  // Inputs
   const [id, setId] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("");
@@ -50,14 +51,15 @@ function ReceiptCard({ receipt, onEvent }) {
   const [identificationNumber, setIdentificationNumber] = useState("");
   const [documentType, setDocumentType] = useState("");
   const [logoImageUrl, setLogoImageUrl] = useState("");
-
+  
+  // Visibility for Dialog
+  const [visible, setVisible] = useState(false);
+  
+  // Visibility for Delete Dialog Confirmation
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  
   // Contexts
   const { updatePrintData } = useContext(PrintContext);
-  // function handlePrint() {
-  //   console.log("rest");
-  //   const pdata = new Receipt(id, title, amount, currency, description, identificationNumber, documentType, address, logoImageUrl);
-  //   setPrintData(pdata);
-  // }
 
   // Cycles
   useEffect(() => {
@@ -78,7 +80,7 @@ function ReceiptCard({ receipt, onEvent }) {
   }, [receipt.id]);
 
   // Methods
-
+  // Update Receipt
   function updateReceipt() {
     event.preventDefault();
     var updatedReceipt = new UpdateReceipt(
@@ -98,6 +100,7 @@ function ReceiptCard({ receipt, onEvent }) {
     });
   }
 
+  // Delete Receipt
   function deleteReceipt() {
     event.preventDefault();
     receiptService.deleteReceipt(id).then((res) => {
@@ -106,15 +109,7 @@ function ReceiptCard({ receipt, onEvent }) {
     });
   }
 
-  // const handlePrint = () => {
-  //   const printContent = document.getElementById("print-content");
-  //   const originalContent = document.body.innerHTML;
-
-  //   document.body.innerHTML = printContent.innerHTML;
-  //   window.print();
-  //   document.body.innerHTML = originalContent;
-  // };
-
+  // Template
   const footer = (
     <>
       <div className="flex gap-2 justify-content-end">

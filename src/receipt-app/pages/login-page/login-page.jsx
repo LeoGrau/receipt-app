@@ -1,11 +1,12 @@
+// React Stuff
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+// Primereact Components
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
-
-import { Link, useNavigate } from "react-router-dom";
-
-import { useState } from "react";
 
 // Models
 import { AuthUser } from "../../models/auth.model"
@@ -13,10 +14,10 @@ import { AuthUser } from "../../models/auth.model"
 // Service
 import { userService } from "../../services/user.service"
 
+// Styles
 import "./login-page.css"
 
-
-
+// Template
 function LoginPage() {
   const title = (
     <>

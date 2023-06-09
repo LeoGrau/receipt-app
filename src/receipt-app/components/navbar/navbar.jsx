@@ -1,10 +1,14 @@
+// React Stuff
 import { Link, useNavigate } from "react-router-dom";
+
+// Styles
 import "./navbar.css";
 
 
 
 function Navbar() {
 
+  // Consts
   const navigate = useNavigate();
   
   // Methods
@@ -13,6 +17,7 @@ function Navbar() {
     navigate("/login");
   }
 
+  // Templates
   return (
     <>
       <nav className="navbar flex justify-content-between align-items-center px-5">
