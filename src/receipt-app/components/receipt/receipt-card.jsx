@@ -275,6 +275,7 @@ function ReceiptCard({ receipt, onEvent }) {
                 <a
                   target="_blank"
                   onClick={() => {
+                    navigate({ pathname: "/print" });
                     updatePrintData(
                       JSON.stringify(
                         new Receipt(
@@ -290,7 +291,6 @@ function ReceiptCard({ receipt, onEvent }) {
                         )
                       )
                     );
-                    navigate({ pathname: "/print" });
                   }}
                 >
                   <i className="bi bi-printer-fill text-2xl"></i>

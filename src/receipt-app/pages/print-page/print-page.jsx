@@ -61,6 +61,12 @@ function PrintPage() {
     };
   }, []);
 
+
+  // Methods
+  function printPage() {
+    window.print();
+  }
+
   return (
     <>
       <div className="flex justify-content-center align-items-center" style={{ height: "100vh" }}>
@@ -95,7 +101,7 @@ function PrintPage() {
       </div>
       </div>
       <div className="fixed z-2" style={{ right: "20px", bottom: "20px"}}>
-        <Button onClick={window.print()} rounded icon="bi bi-printer-fill" className="text-2xl" style={{width: "50px", height: "50px"}}></Button>
+        <Button onClick={printPage} rounded icon="bi bi-printer-fill" className="text-2xl" style={{width: "50px", height: "50px"}}></Button>
       </div>
     </>
   );
