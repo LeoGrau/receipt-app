@@ -57,7 +57,7 @@ function LoginPage() {
     return errors[name] ? (
       <small className="p-error">{errors[name].message}</small>
     ) : (
-      <small className="p-error">&nsbp;</small>
+      <small className="p-error">&nbsp;</small>
     );
   };
 
@@ -71,7 +71,6 @@ function LoginPage() {
 
   // Navigate
   const navigate = useNavigate();
-
 
   return (
     <>
@@ -87,16 +86,20 @@ function LoginPage() {
               rules={{ required: "Username is required" }}
               render={({ field, fieldState }) => (
                 <>
-                  <span className="p-float-label mb-3">
-                    <InputText
-                      id={field.name}
-                      value={field.value}
-                      className={classNames({ "p-invalid": fieldState.error })}
-                      onChange={(e) => field.onChange(e.target.value)}
-                    />
-                    <label htmlFor="username">Username</label>
-                  </span>
-                  {getFormErrorMessage(field.name)}
+                  <div className="mb-3">
+                    <span className="p-float-label">
+                      <InputText
+                        id={field.name}
+                        value={field.value}
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Username</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                  </div>
                 </>
               )}
             />
@@ -106,19 +109,23 @@ function LoginPage() {
               rules={{ required: "Password is required" }}
               render={({ field, fieldState }) => (
                 <>
-                  <span className="p-float-label">
-                    <Password
-                      className={classNames({ "p-invalid": fieldState.error })}
-                      toggleMask
-                      feedback={false}
-                      id={field.name}
-                      value={field.value}
-                      inputStyle={{ width: "100%" }}
-                      onChange={(e) => field.onChange(e.target.value)}
-                    />
-                    <label htmlFor={field.name}>Password</label>
-                  </span>
-                  {getFormErrorMessage(field.name)}
+                  <div className="mb-3">
+                    <span className="p-float-label">
+                      <Password
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        toggleMask
+                        feedback={false}
+                        id={field.name}
+                        value={field.value}
+                        inputStyle={{ width: "100%" }}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Password</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                  </div>
                 </>
               )}
             />
