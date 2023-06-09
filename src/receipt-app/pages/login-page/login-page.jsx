@@ -1,6 +1,9 @@
 // React Stuff
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+// import { useState } from "react";
+
+// React Hook Forms
+import { Controller, useForm } from "react-hook-form";
 
 // Primereact Components
 import { Card } from "primereact/card";
@@ -8,17 +11,56 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 
-// Models
-import { AuthUser } from "../../models/auth.model"
+//Models
+import { AuthUser } from "../../models/auth.model";
 
 // Service
-import { userService } from "../../services/user.service"
+import { userService } from "../../services/user.service";
 
 // Styles
-import "./login-page.css"
+import "./login-page.css";
+import { classNames } from "primereact/utils";
 
 // Template
 function LoginPage() {
+  // Default Input Values
+  const defaultValues = {
+    username: "",
+    password: "",
+  };
+
+  // Form Parameters
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    // getValues,
+    reset,
+  } = useForm({ defaultValues });
+
+  // Methods
+
+  function handleSignIn(authUser) {
+    return userService.signIn(authUser).then((res) => {
+      localStorage.setItem("user", JSON.stringify(res.data.resource));
+      reset();
+      navigate("/");
+    });
+  }
+  const signIn = (data) => {
+    event.preventDefault(); // Prevent form submission and page reload
+    const authUser = new AuthUser(data.username, data.password);
+    handleSignIn(authUser);
+  };
+
+  const getFormErrorMessage = (name) => {
+    return errors[name] ? (
+      <small className="p-error">{errors[name].message}</small>
+    ) : (
+      <small className="p-error">&nbsp;</small>
+    );
+  };
+
   const title = (
     <>
       <div className="mb-3">
@@ -26,27 +68,10 @@ function LoginPage() {
       </div>
     </>
   );
-  
-
-  // Inputs
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   // Navigate
   const navigate = useNavigate();
 
-
-
-  // Methods
-  
-  function signIn(authUser) {
-    return userService.signIn(authUser).then(res => { localStorage.setItem("user", JSON.stringify(res.data.resource)); navigate('/');  });
-  }
-  const handleSignIn = () => {
-    event.preventDefault(); // Prevent form submission and page reload
-    const authUser = new AuthUser(username, password);
-    signIn(authUser);
-  }
 
   return (
     <>
@@ -55,33 +80,60 @@ function LoginPage() {
         className="login-page flex justify-content-center align-items-center way-big-height text-center"
       >
         <Card title={title} className="card">
-          <form action="" onSubmit={handleSignIn}>
-          <div className="p-float-label mb-5 login-input">
-            <InputText
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+          <form action="" onSubmit={handleSubmit(signIn)}>
+            <Controller
+              name="username"
+              control={control}
+              rules={{ required: "Username is required" }}
+              render={({ field, fieldState }) => (
+                <>
+                  <span className="p-float-label mb-3">
+                    <InputText
+                      id={field.name}
+                      value={field.value}
+                      className={classNames({ "p-invalid": fieldState.error })}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                    <label htmlFor="username">Username</label>
+                  </span>
+                  {getFormErrorMessage(field.name)}
+                </>
+              )}
             />
-            <label htmlFor="username">Username</label>
-          </div>
-          <div className="p-float-label login-input">
-            <Password
-              className="test"
-              toggleMask 
-              feedback={false}
-              id="password"
-              value={password}
-              inputStyle={{ widht: "100%"}}
-              onChange={(e) => setPassword(e.target.value)}
+            <Controller
+              name="password"
+              control={control}
+              rules={{ required: "Password is required" }}
+              render={({ field, fieldState }) => (
+                <>
+                  <span className="p-float-label">
+                    <Password
+                      className={classNames({ "p-invalid": fieldState.error })}
+                      toggleMask
+                      feedback={false}
+                      id={field.name}
+                      value={field.value}
+                      inputStyle={{ width: "100%" }}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                    <label htmlFor={field.name}>Password</label>
+                  </span>
+                  {getFormErrorMessage(field.name)}
+                </>
+              )}
             />
-            <label htmlFor="username">Password</label>
-          </div>
-          <div className="mt-5 text-center">
-            <p className="text-xs"><span>Do not have an account?</span> <Link to="/register"> Sign Up </Link></p>
-          </div>
-          <div>
-      <Button type="submit" className="p-button mt-3"> Sign In </Button>
-    </div>
+            <div className="mt-5 text-center">
+              <p className="text-xs">
+                <span>Do not have an account?</span>{" "}
+                <Link to="/register"> Sign Up </Link>
+              </p>
+            </div>
+            <div>
+              <Button type="submit" className="p-button mt-3">
+                {" "}
+                Sign In{" "}
+              </Button>
+            </div>
           </form>
         </Card>
       </div>
