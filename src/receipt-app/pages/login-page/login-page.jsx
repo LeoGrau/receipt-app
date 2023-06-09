@@ -57,7 +57,7 @@ function LoginPage() {
     return errors[name] ? (
       <small className="p-error">{errors[name].message}</small>
     ) : (
-      <small className="p-error">&nbsp;</small>
+      <small className="p-error">&nsbp;</small>
     );
   };
 

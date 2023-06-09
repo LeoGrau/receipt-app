@@ -1,6 +1,8 @@
 // React Stuff
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+// React Hook Forms
+import { Controller, useForm } from "react-hook-form";
 
 // Styles
 import "./register-page.css";
@@ -12,6 +14,9 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 
+// Prime Utils
+import { classNames } from "primereact/utils";
+
 // Models
 import { RegisterUser } from "../../models/register.model";
 
@@ -19,32 +24,58 @@ import { RegisterUser } from "../../models/register.model";
 import { userService } from "../../services/user.service";
 
 function RegisterPage() {
-
-  // Inputs
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [description, setDescription] = useState("");
-
   // Consts
   const navigate = useNavigate();
 
-  // Methods
-  function registerUser() {
-    const newUser = new RegisterUser(username, password, firstname, lastname, description);
-    console.log(newUser);
-    userService.signUp(newUser).then(res => { console.log(res) });
+  const defaultValues = {
+    username: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+    description: "",
+  };
 
-    // Blank spaces 
-    setUsername("");
-    setPassword("")
-    setFirstname("")
-    setLastname("")
-    setDescription("")
-    
-    navigate("/login")
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm({ defaultValues });
+
+  // Inputs
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [firstname, setFirstname] = useState("");
+  // const [lastname, setLastname] = useState("");
+  // const [description, setDescription] = useState("");
+
+  // Methods
+  function registerUser(data) {
+    const newUser = new RegisterUser(
+      data.firstname,
+      data.password,
+      data.firstname,
+      data.lastname,
+      data.description
+    );
+    console.log(newUser);
+    userService.signUp(newUser).then((res) => {
+      console.log(res);
+    });
+
+    // Blank spaces
+    reset()
+
+    navigate("/login");
   }
+
+  const getFormErrorMessage = (name) => {
+    return errors[name] ? (
+      <small className="p-error">{errors[name].message}</small>
+    ) : (
+      <small className="p-error">&nbsp;</small>
+    );
+  };
 
   // Template
   // Part of Dialog
@@ -56,13 +87,6 @@ function RegisterPage() {
     </>
   );
 
-  const footer = (
-    <>
-      <div>
-        <Button className="p-button" onClick={registerUser}> Sign Up </Button>
-      </div>
-    </>
-  );
 
   return (
     <>
@@ -70,54 +94,126 @@ function RegisterPage() {
         style={{}}
         className="register-page flex justify-content-center align-items-center way-big-height text-center"
       >
-        <Card title={title} footer={footer} className="card">
-          <form action="">
+        <Card title={title} className="card">
+          <form action="" onSubmit={handleSubmit(registerUser)}>
             <section className="grid-2-cols column-gap-3">
-            <div className="p-float-label mb-5">
-              <InputText
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+              <Controller
+                name="username"
+                control={control}
+                rules={{ required: "Username is required" }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <div className="mb-3">
+                    <span className="p-float-label">
+                      <InputText
+                        id={field.name}
+                        value={field.value}
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Username</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                    </div>
+                  </>
+                )}
               />
-              <label htmlFor="username">Username</label>
-            </div>
-            <div className="p-float-label mb-5">
-              <Password
-                className="test"
-                toggleMask
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+              <Controller
+                name="password"
+                control={control}
+                rules={{ required: "Password is required" }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <div className="mb-3">
+                    <span className="p-float-label">
+                      <Password
+                        id={field.name}
+                        value={field.value}
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Password</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                    </div>
+                  </>
+                )}
               />
-              <label htmlFor="username">Password</label>
-            </div>
-            <div className="p-float-label mb-5">
-              <InputText
-                id="firstname"
-                value={firstname}
-                onChange={(e) => setFirstname(e.target.value)}
+              <Controller
+                name="firstname"
+                control={control}
+                rules={{ required: "Firstname is required" }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <div className="mb-3">
+                    <span className="p-float-label">
+                      <InputText
+                        id={field.name}
+                        value={field.value}
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Firstname</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                    </div>
+                  </>
+                )}
               />
-              <label htmlFor="username">Firstname</label>
-            </div>
-            <div className="p-float-label mb-5">
-              <InputText
-                id="lastname"
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
+              <Controller
+                name="lastname"
+                control={control}
+                rules={{ required: "Lastname is required" }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <div className="mb-3">
+                    <span className="p-float-label">
+                      <InputText
+                        id={field.name}
+                        value={field.value}
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Lastname</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                    </div>
+                  </>
+                )}
               />
-              <label htmlFor="username">Lastname</label>
-            </div>
             </section>
-            <span className="p-float-label">
-              <InputTextarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={5}
-                cols={30}
+            <Controller
+                name="description"
+                control={control}
+                rules={{ required: "Description is required" }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <div className="mb-3">
+                    <span className="p-float-label">
+                      <InputTextarea
+                        id={field.name}
+                        value={field.value}
+                        className={classNames({
+                          "p-invalid": fieldState.error,
+                        })}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                      <label htmlFor={field.name}>Description</label>
+                    </span>
+                    {getFormErrorMessage(field.name)}
+                    </div>
+                  </>
+                )}
               />
-              <label htmlFor="description">Description</label>
-            </span>
+              <Button type="submit" label="Sign Up"></Button>
           </form>
           <div className="mt-5 text-center">
             <p className="text-xs">
